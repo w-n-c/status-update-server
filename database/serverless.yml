@@ -1,0 +1,78 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+service: status-update-db
+app: status-update
+org: newellwm
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-2'}
+  
+custom:
+  prefix: ${self:service}-${self:provider.stage}
+  task_db: ${self:custom.prefix}-task
+  status_db: ${self:custom.prefix}-status
+
+resources:
+  Resources:
+    taskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.task_db}
+        AttributeDefinitions:
+          - AttributeName: task # task is type#title
+            AttributeType: S
+          - AttributeName: lastStatus # lastStatus is timestamp#username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: task
+            KeyType: HASH
+          - AttributeName: lastStatus
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    statusTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.status_db}
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+          - AttributeName: task # task is type#title
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+          - AttributeName: task
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: task-username-index
+            KeySchema:
+              - AttributeName: task
+                KeyType: HASH
+              - AttributeName: username
+                KeyType: RANGE
+            Projection:
+              ProjectionType: KEYS_ONLY
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+  Outputs:
+    TaskTableArn:
+      Description: The ARN for the Task Table
+      Value:
+        'Fn::GetAtt': [taskTable, Arn]
+      Export:
+        Name: ${self:service}:${self:provider.stage}:TaskTableArn
+    StatusTableArn:
+      Description: The ARN for the Status Table
+      Value:
+        'Fn::GetAtt': [statusTable, Arn]
+      Export:
+        Name: ${self:service}:${self:provider.stage}:StatusTableArn
+
