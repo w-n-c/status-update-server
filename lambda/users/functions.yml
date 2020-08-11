@@ -1,0 +1,20 @@
+functions:
+  getAll:
+    handler:
+    events:
+      - http:
+          path: /users
+          method: get
+          cors: true
+  getByTask:
+    handler:
+    events:
+      - http:
+          path: tasks/category/{category}/title/{title}/users
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                category: true
+                title: true
