@@ -1,0 +1,95 @@
+functions:
+  create:
+    handler:
+    events:
+      - http:
+          path: statuses/date/{date}
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                date: true
+  getByDate:
+    handler:
+    events:
+      - http:
+          path: statuses/date/{date}
+          method: post
+          cors: true
+          request:
+            parameters:
+              paths:
+                date: true
+  getByUserTask:
+    handler:
+    events:
+      - http:
+          path: users/{id}/tasks/category/{category}/title/{title}/statuses
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                category: true
+                title: true
+  getByUser:
+    handler:
+    events:
+      - http:
+          path: /users/{id}/statuses
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+  getByTask:
+    handler:
+    events:
+      - http:
+          path: tasks/category/{category}/title/{title}/statuses
+          method: get
+          cors: true
+          request:
+            parameters:
+              queryStrings:
+                category: true
+                title: true
+  update:
+    handler:
+    events:
+      - http:
+          path: statuses/user/{id}/date/{date}
+          method: patch
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                date: true
+  replace:
+    handler:
+    events:
+      - http:
+          path: statuses/user/{id}/date/{date}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                date: true
+  delete:
+    handler:
+    events:
+      - http:
+          path: statuses/user/{id}/date/{date}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                date: true
