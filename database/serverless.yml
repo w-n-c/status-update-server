@@ -21,18 +21,27 @@ resources:
       Properties:
         TableName: ${self:custom.task_db}
         AttributeDefinitions:
-          - AttributeName: task # task is type#title
+          - AttributeName: category
             AttributeType: S
-          - AttributeName: lastStatus # lastStatus is timestamp#username
+          - AttributeName: title
             AttributeType: S
         KeySchema:
-          - AttributeName: task
+          - AttributeName: category
             KeyType: HASH
-          - AttributeName: lastStatus
+          - AttributeName: title
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        LocalSecondaryIndex:
+          - IndexName: category-usernameStart-index
+            KeySchema:
+              - AttributeName: category
+                KeyType: HASH
+              - AttributeName: usernameStart
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
     statusTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -40,22 +49,22 @@ resources:
         AttributeDefinitions:
           - AttributeName: username
             AttributeType: S
-          - AttributeName: task # task is type#title
+          - AttributeName: datetask
             AttributeType: S
         KeySchema:
           - AttributeName: username
             KeyType: HASH
-          - AttributeName: task
+          - AttributeName: datetask
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         GlobalSecondaryIndexes:
-          - IndexName: task-username-index
+          - IndexName: task-postedOn-index
             KeySchema:
               - AttributeName: task
                 KeyType: HASH
-              - AttributeName: username
+              - AttributeName: postedOn
                 KeyType: RANGE
             Projection:
               ProjectionType: KEYS_ONLY
