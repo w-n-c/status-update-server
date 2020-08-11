@@ -18,6 +18,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   frameworkVersion: ‘1.64.1’
+  memorySize: 128
   versionFunctions: false
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
@@ -41,9 +42,6 @@ provider:
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:*" # replace with cloud formation input for the dynamos
 
 functions:
-  hello:
-    handler: src/handler.hello
-    events:
-      - http:
-          method: get
-          path: hello
+  - ${file(./tasks/functions.yml)}
+  - ${file(./statuses/functions.yml)}
+  - ${file(./users/functions.yml)}
