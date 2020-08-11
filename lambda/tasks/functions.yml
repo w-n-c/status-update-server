@@ -1,0 +1,66 @@
+functions:
+  create:
+    handler:
+    events:
+      - http:
+          path: tasks
+          method: post
+          cors: true
+  getByCategory:
+    handler:
+    events:
+      - http:
+          path: category/{category}/tasks
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                category: true
+  getByUser:
+    handler:
+    events:
+      - http:
+          path: /users/{id}/tasks
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+  update:
+    handler:
+    events:
+      - http:
+          path: tasks/category/{category}/title/{title}
+          method: patch
+          cors: true
+          request:
+            parameters:
+              paths:
+                category: true
+                title: true
+  replace:
+    handler:
+    events:
+      - http:
+          path: tasks/category/{category}/title/{title}
+          method: put
+          cors: true
+          request:
+            parameters:
+              paths:
+                category: true
+                title: true
+  delete:
+    handler:
+    events:
+      - http:
+          path: tasks/category/{category}/title/{title}
+          method: delete
+          cors: true
+          request:
+            parameters:
+              paths:
+                category: true
+                title: true
