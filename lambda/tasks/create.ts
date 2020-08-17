@@ -1,1 +1,1 @@
-export { replace as create } from './replace'
+export { replace as create } from './replace';
