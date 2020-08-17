@@ -1,11 +1,15 @@
 functions:
   create:
-    handler:
+    handler: tasks.create
     events:
       - http:
           path: tasks
           method: post
           cors: true
+          response:
+            statusCodes:
+              201:
+                pattern: ''
   getByCategory:
     handler:
     events:
@@ -41,7 +45,7 @@ functions:
                 category: true
                 title: true
   replace:
-    handler:
+    handler: tasks.replace
     events:
       - http:
           path: tasks/category/{category}/title/{title}

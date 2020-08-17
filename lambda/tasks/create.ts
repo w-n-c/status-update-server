@@ -1,0 +1,1 @@
+export { replace as create } from './replace'
