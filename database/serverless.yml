@@ -12,6 +12,7 @@ provider:
     TASK_TABLE: ${self:custom.prefix}-task
     TASK_TABLE_USER_INDEX: username-title-index
     STATUS_TABLE: ${self:custom.prefix}-status
+    STATUS_TABLE_TASK_INDEX: task-datetime-index
 custom:
   prefix: ${self:service}-${self:provider.stage}
 resources:
@@ -63,11 +64,11 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         GlobalSecondaryIndexes:
-          - IndexName: task-postedOn-index
+          - IndexName: ${self:provider.environment.STATUS_TABLE_TASK_INDEX}
             KeySchema:
               - AttributeName: task
                 KeyType: HASH
-              - AttributeName: postedOn
+              - AttributeName: datetime
                 KeyType: RANGE
             Projection:
               ProjectionType: KEYS_ONLY
