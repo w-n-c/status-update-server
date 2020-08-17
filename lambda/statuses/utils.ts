@@ -16,10 +16,12 @@ function getValuesFromUserAndDate(expression = '') {
             };
             if (expression) params.ProjectionExpression = expression
             const data = await dynamo.query(params).promise();
-            if (!data.Items || data.Count > 1) {
+            if (!data.Items) {
                 throw new Error('[404] Not Found');
-            } else {
+            } else if (data.Count == 1) {
                 return data.Items[0];
+            } else {
+                return data.Items;
             }
         } catch (e) {
             console.error('[500] Internal Error', e);
