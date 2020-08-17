@@ -6,13 +6,13 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 
 export const replace = async (event: APIGatewayProxyWithCognitoAuthorizerEvent): Promise<APIGatewayProxyResultV2> => {
     const task = JSON.parse(event.body);
-    task.category = event.pathParameters.category || task.category,
-    task.title = event.pathParameters.title || task.title,
-    task.usernameStart = `${event.requestContext.identity.user}#${(new Date()).toISOString()}`;
+    task.category = event.pathParameters.category || task.category;
+    task.title = event.pathParameters.title || task.title;
+    task.username = event.requestContext.identity.user;
     const params:PutItemInput = {
         TableName: process.env.TASK_TABLE,
         Item: task
-    }
+    };
     await dynamo.put(params).promise();
     return;
 }

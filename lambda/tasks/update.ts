@@ -7,8 +7,8 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 export const update = async ({pathParameters, body}: APIGatewayProxyWithCognitoAuthorizerEvent): Promise<APIGatewayProxyResultV2> => {
     await validateId(pathParameters);
     const task = JSON.parse(body);
-    task.category = pathParameters.category,
-    task.title = pathParameters.title
+    task.category = pathParameters.category;
+    task.title = pathParameters.title;
     const params:PutItemInput = {
         TableName: process.env.TASK_TABLE,
         Item: task
@@ -24,10 +24,10 @@ async function validateId(task) {
             Key: task
         }).promise();
         if (!data.Item) {
-            throw new Error('[404] Not Found')
+            throw new Error('[404] Not Found');
         }
     } catch (e) {
-        console.error('from validateEvent', e);
+        console.error('[500] Internal Error', e);
         throw e;
     }
 }

@@ -1,4 +1,6 @@
 export {create} from './create';
-export {replace} from './replace';
+export {getByCategory} from './getByCategory';
+export {getByUser} from './getByUser';
 export {remove} from './remove';
+export {replace} from './replace';
 export {update} from './update';
