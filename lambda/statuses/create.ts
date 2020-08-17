@@ -1,15 +1,18 @@
-import AWS, { ApiGatewayV2 } from 'aws-sdk';
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import AWS from 'aws-sdk';
+import {APIGatewayProxyWithCognitoAuthorizerEvent } from 'aws-lambda';
 import { PutItemInput } from 'aws-sdk/clients/dynamodb';
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
-export default async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+export const create = async (event: APIGatewayProxyWithCognitoAuthorizerEvent) => {
+    const status = JSON.parse(event.body);
+    status.username = event.requestContext.identity.user;
+    status.datetask = status.datetime + '#' + status.task.category  + '#' + status.task.title;
     const params:PutItemInput = {
-        TableName: 'cloudformation',
-        Item: JSON.parse(event.body)
-    }
-    await dynamo.put(params)
-    return event.body;
+        TableName: process.env.TASK_TABLE,
+        Item: status
+    };
+    await dynamo.put(params).promise();
+    delete status.datetask;
+    return status;
 }
-
