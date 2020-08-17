@@ -32,7 +32,7 @@ functions:
             parameters:
               paths:
                 id: true
-  update:
+  update: tasks.update
     handler:
     events:
       - http:
@@ -57,7 +57,7 @@ functions:
                 category: true
                 title: true
   delete:
-    handler:
+    handler: tasks.remove
     events:
       - http:
           path: tasks/category/{category}/title/{title}
