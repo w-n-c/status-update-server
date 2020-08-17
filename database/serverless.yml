@@ -8,18 +8,17 @@ provider:
   name: aws
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
-  
+  environment:
+    TASK_TABLE: ${self:custom.prefix}-task
+    STATUS_TABLE: ${self:custom.prefix}-status
 custom:
   prefix: ${self:service}-${self:provider.stage}
-  task_db: ${self:custom.prefix}-task
-  status_db: ${self:custom.prefix}-status
-
 resources:
   Resources:
     taskTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.task_db}
+        TableName: ${self:provider.environment.TASK_TABLE}
         AttributeDefinitions:
           - AttributeName: category
             AttributeType: S
@@ -45,7 +44,7 @@ resources:
     statusTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.status_db}
+        TableName: ${self:provider.environment.STATUS_TABLE}
         AttributeDefinitions:
           - AttributeName: username
             AttributeType: S
@@ -71,17 +70,3 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-  Outputs:
-    TaskTableArn:
-      Description: The ARN for the Task Table
-      Value:
-        'Fn::GetAtt': [taskTable, Arn]
-      Export:
-        Name: ${self:service}:${self:provider.stage}:TaskTableArn
-    StatusTableArn:
-      Description: The ARN for the Status Table
-      Value:
-        'Fn::GetAtt': [statusTable, Arn]
-      Export:
-        Name: ${self:service}:${self:provider.stage}:StatusTableArn
-
