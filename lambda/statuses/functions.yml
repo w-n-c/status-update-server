@@ -1,17 +1,13 @@
 functions:
   create:
-    handler:
+    handler: statuses.create
     events:
       - http:
-          path: statuses/date/{date}
+          path: statuses
           method: post
           cors: true
-          request:
-            parameters:
-              paths:
-                date: true
   getByDate:
-    handler:
+    handler: statuses.getByDate
     events:
       - http:
           path: statuses/date/{date}
@@ -22,7 +18,7 @@ functions:
               paths:
                 date: true
   getByUserTask:
-    handler:
+    handler: statuses.getByUserTask
     events:
       - http:
           path: users/{id}/tasks/category/{category}/title/{title}/statuses
@@ -35,7 +31,7 @@ functions:
                 category: true
                 title: true
   getByUser:
-    handler:
+    handler: statuses.getByUser
     events:
       - http:
           path: /users/{id}/statuses
@@ -46,7 +42,7 @@ functions:
               paths:
                 id: true
   getByTask:
-    handler:
+    handler: statuses.getByTask
     events:
       - http:
           path: tasks/category/{category}/title/{title}/statuses
@@ -58,10 +54,10 @@ functions:
                 category: true
                 title: true
   update:
-    handler:
+    handler: statuses.update
     events:
       - http:
-          path: statuses/user/{id}/date/{date}
+          path: statuses/user/{user}/datetime/{datetime}
           method: patch
           cors: true
           request:
@@ -70,10 +66,10 @@ functions:
                 id: true
                 date: true
   replace:
-    handler:
+    handler: statuses.replace
     events:
       - http:
-          path: statuses/user/{id}/date/{date}
+          path: statuses/user/{id}/datetime/{datetime}
           method: put
           cors: true
           request:
@@ -82,10 +78,10 @@ functions:
                 id: true
                 date: true
   delete:
-    handler:
+    handler: statuses.remove
     events:
       - http:
-          path: statuses/user/{id}/date/{date}
+          path: statuses/user/{id}/datetime/{datetime}
           method: delete
           cors: true
           request:
