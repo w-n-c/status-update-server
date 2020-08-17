@@ -10,6 +10,7 @@ provider:
   region: ${opt:region, 'us-east-2'}
   environment:
     TASK_TABLE: ${self:custom.prefix}-task
+    TASK_TABLE_USER_INDEX: username-title-index
     STATUS_TABLE: ${self:custom.prefix}-status
 custom:
   prefix: ${self:service}-${self:provider.stage}
@@ -32,15 +33,18 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        LocalSecondaryIndex:
-          - IndexName: category-usernameStart-index
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.TASK_TABLE_USER_INDEX}
             KeySchema:
-              - AttributeName: category
+              - AttributeName: username
                 KeyType: HASH
-              - AttributeName: usernameStart
+              - AttributeName: title
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
     statusTable:
       Type: AWS::DynamoDB::Table
       Properties:
