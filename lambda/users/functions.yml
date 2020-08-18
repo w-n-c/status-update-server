@@ -1,13 +1,13 @@
 functions:
   getAll:
-    handler:
+    handler: users.getAll
     events:
       - http:
           path: /users
           method: get
           cors: true
   getByTask:
-    handler:
+    handler: users.getByTask
     events:
       - http:
           path: tasks/category/{category}/title/{title}/users
