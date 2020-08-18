@@ -10,8 +10,8 @@ functions:
             statusCodes:
               201:
                 pattern: ''
-  getByCategory: tasks.getByCategory
-    handler:
+  getByCategory:
+    handler:  tasks.getByCategory
     events:
       - http:
           path: category/{category}/tasks
@@ -21,8 +21,8 @@ functions:
             parameters:
               paths:
                 category: true
-  getByUser: tasks.getByUser
-    handler:
+  getByUser:
+    handler: tasks.getByUser
     events:
       - http:
           path: /users/{id}/tasks
@@ -32,8 +32,8 @@ functions:
             parameters:
               paths:
                 id: true
-  update: tasks.update
-    handler:
+  update:
+    handler: tasks.update
     events:
       - http:
           path: tasks/category/{category}/title/{title}
